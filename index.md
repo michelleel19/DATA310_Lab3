@@ -1,37 +1,79 @@
-## Welcome to GitHub Pages
+## Lab 3
 
-You can use the [editor on GitHub](https://github.com/michelleel19/DATA310_Lab3/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+### Questions
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Q1. (T/F) An "ordinary least squares" (or OLS) model seeks to minimize the differences between your true and estimated dependent variable.
 
-### Markdown
+Answer: True. When minimizing the sum of the squared residuals, you are also minimizing x.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Q2. (Agree/Disagree) In a linear regression model, all feature must correlate with the noise in order to obtain a good fit.
+
+Answer: Disagree. Noise is an independent error term and linear regression models can still have a decent fit without adjusting to all of the noise.
+
+Q3. Write your own code to import L3Data.csv into python as a data frame. Then save the feature values  'days online','views','contributions','answers' into a matrix x and consider 'Grade' values as the dependent variable. If you separate the data into Train & Test with test_size=0.25 and random_state = 1234. If we use the features of x to build a multiple linear regression model for predicting y then the root mean square error on the test data is close to:
 
 ```markdown
-Syntax highlighted code block
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
 
-# Header 1
-## Header 2
-### Header 3
+df = pd.read_csv('L3Data.csv')
+X = df[['days online','views','contributions','answers']].values
+y = df['Grade'].values
 
-- Bulleted
-- List
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=1234)
 
-1. Numbered
-2. List
+model = LinearRegression()
+model.fit(X_train, y_train) # Always fit on train data
+y_pred = model.predict(X_test) # Predict tested data
 
-**Bold** and _Italic_ and `Code` text
+rmse = np.sqrt(mean_squared_error(y_test,y_pred))
+print(rmse)
+```
+Answer: 8.3244
 
-[Link](url) and ![Image](src)
+Q4. (T/F) In practice we determine the weights for linear regression with the "X_test" data.
+
+Answer: False. We determine the weights for linear regression with the trained data.
+
+Q5. (T/F) Polynomial regression is best suited for functional relationships that are non-linear in weights.
+
+Answer: False. Even though Polynomial regression allows for a non-linear relationship between X and Y, this type of regression is still considered a linear regression in terms of weights.
+
+Q6. (T/F) Linear regression, multiple linear regression, and polynomial regression can be all fit using LinearRegression() from the sklearn.linear_model module in Python.
+
+Answer: True, these can all be fitted using LinearRegression() from the sklearn.linear_model module.
+
+Q7. Write your own code to import L3Data.csv into python as a data frame. Then save the feature values  'days online','views','contributions','answers' into a matrix x and consider 'Grade' values as the dependent variable. If you separate the data into Train & Test with test_size=0.25 and random_state = 1234, then the number of observations we have in the Train data is:
+
+```markdown
+len(X_train)
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+Answer: 23
 
-### Jekyll Themes
+Q8. (T/F) The gradient descent method does not need any hyperparameters.
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/michelleel19/DATA310_Lab3/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+Answer: True, especially for the learning rate.
 
-### Support or Contact
+Q9. To create and display a figure using matplotlib.pyplot that has visual elements (scatterplot, labeling of the axes, display of grid), in what order would the below code need to be executed?
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+```markdown
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots()
+ax.scatter(X_test, y_test, color="black", label="Truth")
+ax.scatter(X_test, lin_reg.predict(X_test), color="green", label="Linear")
+ax.set_xlabel("Discussion Contributions")
+ax.set_ylabel("Grade")
+
+ax.grid(b=True,which='major', color ='grey', linestyle='-', alpha=0.8)
+ax.grid(b=True,which='minor', color ='grey', linestyle='--', alpha=0.2)
+ax.minorticks_on()
+```
+
+Q10. Which of the following forms is not  linear in the weights ?
+
+Answer: Mathematical expression with the 4th power beta.
